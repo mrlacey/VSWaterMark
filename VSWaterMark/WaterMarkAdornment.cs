@@ -30,13 +30,16 @@ namespace VSWaterMark
             _adornmentLayer = view.GetAdornmentLayer(nameof(WaterMarkAdornment));
 
             // Reposition the adornment whenever the editor window is resized
-            _view.ViewportHeightChanged += (sender, e) => { OnSizeChange(); };
-            _view.ViewportWidthChanged += (sender, e) => { OnSizeChange(); };
+            _view.ViewportHeightChanged += (sender, e) => { RefreshAdornment(); };
+            _view.ViewportWidthChanged += (sender, e) => { RefreshAdornment(); };
 
-            TryLoadOptions();
+            System.Diagnostics.Debug.WriteLine("WaterMarkAdornment ctor");
+            Messenger.UpdateAdornment += _ => { RefreshAdornment(); };
+
+            RefreshAdornment();
         }
 
-        public void OnSizeChange()
+        public void RefreshAdornment()
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -67,6 +70,7 @@ namespace VSWaterMark
 
                 if (!options.IsEnabled)
                 {
+                    System.Diagnostics.Debug.WriteLine("options not enabled");
                     return false;
                 }
 
@@ -181,6 +185,7 @@ namespace VSWaterMark
                 return !string.IsNullOrWhiteSpace(options.DisplayedText);
             }
 
+            System.Diagnostics.Debug.WriteLine("Package not loaded");
             return false;
         }
 

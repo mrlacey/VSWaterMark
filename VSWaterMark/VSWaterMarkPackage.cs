@@ -67,6 +67,9 @@ namespace VSWaterMark
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             VSWaterMarkPackage.Instance = this;
+
+            System.Diagnostics.Debug.WriteLine("InitializeAsync");
+            Messenger.RequestUpdateAdornment();
         }
     }
 }

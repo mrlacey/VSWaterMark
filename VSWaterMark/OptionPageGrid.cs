@@ -2,6 +2,7 @@
 // Copyright (c) Matt Lacey Limited. All rights reserved.
 // </copyright>
 
+using System;
 using System.ComponentModel;
 using Microsoft.VisualStudio.Shell;
 
@@ -73,5 +74,13 @@ namespace VSWaterMark
         [DisplayName("Opacity")]
         [Description("Strength of the background opacity.")]
         public double BorderOpacity { get; set; } = 0.7;
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            System.Diagnostics.Debug.WriteLine("OnClosed");
+
+            Messenger.RequestUpdateAdornment();
+        }
     }
 }
