@@ -28,7 +28,7 @@ namespace VSWaterMark
         [Category("Text")]
         [DisplayName("Displayed text")]
         [Description("The text to show in the watermark.")]
-        public string DisplayedText { get; set; } = "Go to Tools > Options > Water Mark to change this text.";
+        public string DisplayedText { get; set; } = "To change this text, go to Tools > Options > Water Mark.";
 
         [Category("Text")]
         [DisplayName("Text size")]
