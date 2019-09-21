@@ -6,6 +6,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 
 namespace VSWaterMark
@@ -45,6 +46,8 @@ namespace VSWaterMark
         public static VSWaterMarkPackage Instance;
 #pragma warning restore SA1401 // Fields should be private
 
+        private DocumentEventHandlers docHandlers;
+
         public OptionPageGrid Options
         {
             get
@@ -67,6 +70,10 @@ namespace VSWaterMark
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             VSWaterMarkPackage.Instance = this;
+
+            var rdt = await this.GetServiceAsync(typeof(SVsRunningDocumentTable)) as IVsRunningDocumentTable;
+
+            docHandlers = new DocumentEventHandlers(rdt);
 
             System.Diagnostics.Debug.WriteLine("InitializeAsync");
             Messenger.RequestUpdateAdornment();

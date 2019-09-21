@@ -46,6 +46,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AdornmentFactory.cs" />
+    <Compile Include="DocumentEventHandlers.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Messenger.cs" />
     <Compile Include="OptionPageGrid.cs">

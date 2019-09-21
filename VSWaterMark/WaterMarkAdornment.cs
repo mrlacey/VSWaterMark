@@ -34,7 +34,7 @@ namespace VSWaterMark
             _view.ViewportWidthChanged += (sender, e) => { RefreshAdornment(); };
 
             System.Diagnostics.Debug.WriteLine("WaterMarkAdornment ctor");
-            Messenger.UpdateAdornment += _ => { RefreshAdornment(); };
+            Messenger.UpdateAdornment += () => { RefreshAdornment(); };
 
             RefreshAdornment();
         }
