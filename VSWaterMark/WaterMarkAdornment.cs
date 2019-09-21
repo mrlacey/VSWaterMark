@@ -112,7 +112,7 @@ namespace VSWaterMark
 
                 try
                 {
-                    _root.WaterMarkText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(options.TextColor));
+                    _root.WaterMarkText.Foreground = GetColorBrush(options.TextColor);
                 }
                 catch (Exception exc)
                 {
@@ -121,7 +121,7 @@ namespace VSWaterMark
 
                 try
                 {
-                    _root.WaterMarkBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(options.BorderBackground));
+                    _root.WaterMarkBorder.Background = GetColorBrush(options.BorderBackground);
                 }
                 catch (Exception exc)
                 {
@@ -130,7 +130,7 @@ namespace VSWaterMark
 
                 try
                 {
-                    _root.WaterMarkBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(options.BorderColor));
+                    _root.WaterMarkBorder.BorderBrush = GetColorBrush(options.BorderColor);
                 }
                 catch (Exception exc)
                 {
@@ -187,6 +187,11 @@ namespace VSWaterMark
 
             System.Diagnostics.Debug.WriteLine("Package not loaded");
             return false;
+        }
+
+        private SolidColorBrush GetColorBrush(string color)
+        {
+            return new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
         }
 
         private void OutputError(string message, Exception exc = null)

@@ -47,17 +47,17 @@ namespace VSWaterMark
 
         [Category("Text")]
         [DisplayName("Color")]
-        [Description("Name of the color to use for the text.")]
+        [Description("The color to use for the text. Can be a named value or Hex (e.g. '#FF00FF')")]
         public string TextColor { get; set; } = "Red";
 
         [Category("Background")]
         [DisplayName("Border")]
-        [Description("Name of the color to use for the border.")]
+        [Description("The color to use for the border. Can be a named value or Hex (e.g. '#FF00FF')")]
         public string BorderColor { get; set; } = "Gray";
 
         [Category("Background")]
         [DisplayName("Background")]
-        [Description("Name of the color to use for the background.")]
+        [Description("The color to use for the background. Can be a named value or Hex (e.g. '#FF00FF')")]
         public string BorderBackground { get; set; } = "White";
 
         [Category("Background")]
