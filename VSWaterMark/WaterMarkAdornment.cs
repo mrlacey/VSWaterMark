@@ -6,7 +6,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 
 namespace VSWaterMark
@@ -53,6 +53,11 @@ namespace VSWaterMark
                     // add the image to the adornment layer and make it relative to the viewports
                     _adornmentLayer.AddAdornment(AdornmentPositioningBehavior.ViewportRelative, null, null, _root, null);
                 }
+                catch (InvalidOperationException ioe)
+                {
+                    OutputError("Unable to display the water mark at this time due to layout issues.");
+                    System.Diagnostics.Debug.WriteLine(ioe);
+                }
                 catch (Exception exc)
                 {
                     OutputError($"Unable to display the water mark{Environment.NewLine}{exc}", exc);
@@ -76,7 +81,18 @@ namespace VSWaterMark
 
                 try
                 {
-                    _root.WaterMarkText.Content = options.DisplayedText;
+                    if (!_root.WaterMarkText.Content.ToString().Equals(options.DisplayedText))
+                    {
+                        _root.WaterMarkText.Content = options.DisplayedText;
+
+                        // Need to force a reshresh after the content has been changed to ensure it gets aligned correctly.
+                        ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+                        {
+                            // A small pause for the adornment to be drawn at the new size and then request update to pick up new width.
+                            await System.Threading.Tasks.Task.Delay(200);
+                            Messenger.RequestUpdateAdornment();
+                        });
+                    }
                 }
                 catch (Exception exc)
                 {
