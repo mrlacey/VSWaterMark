@@ -47,12 +47,15 @@
   <ItemGroup>
     <Compile Include="AdornmentFactory.cs" />
     <Compile Include="DocumentEventHandlers.cs" />
+    <Compile Include="GeneralOutputPane.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Messenger.cs" />
     <Compile Include="OptionPageGrid.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SponsorDetector.cs" />
+    <Compile Include="SponsorRequestHelper.cs" />
     <Compile Include="VSWaterMarkPackage.cs" />
     <Compile Include="WaterMarkAdornment.cs" />
     <Compile Include="WaterMarkControl.xaml.cs">

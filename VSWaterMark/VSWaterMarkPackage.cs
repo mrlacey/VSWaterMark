@@ -77,6 +77,8 @@ namespace VSWaterMark
 
             System.Diagnostics.Debug.WriteLine("InitializeAsync");
             Messenger.RequestUpdateAdornment();
+
+            await SponsorRequestHelper.CheckIfNeedToShowAsync();
         }
     }
 }
