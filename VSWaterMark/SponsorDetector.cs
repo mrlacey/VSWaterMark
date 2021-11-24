@@ -1,7 +1,8 @@
-﻿// <copyright file="VSWaterMarkPackage.cs" company="Matt Lacey Limited">
+﻿// <copyright file="SponsorDetector.cs" company="Matt Lacey Limited">
 // Copyright (c) Matt Lacey Limited. All rights reserved.
 // </copyright>
 
+using System;
 using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
 

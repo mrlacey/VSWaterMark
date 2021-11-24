@@ -32,7 +32,7 @@ namespace VSWaterMark
     [ProvideAutoLoad(Microsoft.VisualStudio.Shell.Interop.UIContextGuids.SolutionHasSingleProject, PackageAutoLoadFlags.BackgroundLoad)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(VSWaterMarkPackage.PackageGuidString)]
-    [InstalledProductRegistration("#110", "#112", "1.3.1", IconResourceID = 400)] // Info on this package for Help/About
+    [InstalledProductRegistration("#110", "#112", "1.5", IconResourceID = 400)] // Info on this package for Help/About
     [ProvideOptionPage(typeof(OptionPageGrid), "Water Mark", "General", 0, 0, true)]
     [ProvideProfileAttribute(typeof(OptionPageGrid), "Water Mark", "General", 106, 107, isToolsOptionPage: true, DescriptionResourceID = 108)]
     public sealed class VSWaterMarkPackage : AsyncPackage
