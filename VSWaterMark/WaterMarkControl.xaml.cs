@@ -6,9 +6,6 @@ using System.Windows.Controls;
 
 namespace VSWaterMark
 {
-    /// <summary>
-    /// Interaction logic for WaterMarkControl.xaml.
-    /// </summary>
     public partial class WaterMarkControl : UserControl
     {
         public WaterMarkControl()
