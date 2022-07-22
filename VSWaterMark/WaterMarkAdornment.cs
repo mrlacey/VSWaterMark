@@ -306,6 +306,14 @@ namespace VSWaterMark
             }
 
             System.Diagnostics.Debug.WriteLine("Package not loaded");
+
+            // Try and load the package so it's there the next time try to access it.
+            if (ServiceProvider.GlobalProvider.GetService(typeof(SVsShell)) is IVsShell shell)
+            {
+                Guid packageToBeLoadedGuid = new Guid(VSWaterMarkPackage.PackageGuidString);
+                shell.LoadPackage(ref packageToBeLoadedGuid, out _);
+            }
+
             return false;
         }
 
