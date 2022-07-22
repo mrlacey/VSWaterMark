@@ -26,15 +26,17 @@ Go to **Tools** &gt; **Options** and select **Water Mark**
 Show something different for each file with placeholders.
 This can help you (or anyone looking at the screen) differentiate files more easily.
 
-Simply enter one of the following in the configured `Displayed text` and it will be replaced when displayed in the editor.
+Simply enter one of the following in the configured `Displayed text` and it will be replaced when shown in the editor.
 
 - **`$(currentFileName)`** - is replaced with the name of the current file.
 - **`$(currentDirectoryName)`** - is replaced with the name of the directory (on disk) that contains the current file.
-- **`$(currentProjectName)`** - is replaced with the name of the project 
+- **`$(currentProjectName)`** - is replaced with the name of the project (within the solution) the file is in.
 
+If any of the placeholders can't be resolved they're replaced with an empty string.
 
+You can use multiple placeholders at once and combine with other 
 
-## Get it from the Marketplace
+## Available in the Marketplace
 
 Get it from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=MattLaceyLtd.WaterMark).
 
