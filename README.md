@@ -7,11 +7,11 @@
 Display a text watermark over the Visual Studio editor.
 
 Ensure your name, handle, URI, or other important text is always visible on the screen.
-This can be useful for presentations, demos, screen casts, or streaming as it ensures that this text is always visible, even on photos or screen captures.
+This can be useful for presentations, demos, screencasts, or streaming as it ensures that this text is always visible, even on photos or screen captures.
 
 ![VS screenshot showing highlighted watermark](./Assets/vswatermark-example.png)
 
-The highlighted text may appear part of the text in the editor but is actually floating above it. It stays put when you scroll.
+The highlighted text may appear as part of the text in the editor but is floating above it. It stays put when you scroll.
 
 ## Fully Configurable
 
@@ -32,8 +32,8 @@ Simply enter one of the following in the configured `Displayed text` and it will
 - **`$(currentDirectoryName)`** - is replaced with the name of the directory (on disk) that contains the current file.
 - **`$(currentProjectName)`** - is replaced with the name of the project (within the solution) the file is in.
 
-If any of the placeholders can't be resolved they're replaced with an empty string.  
-You can use multiple placeholders at once and combine with other text.  
+If any of the placeholders can't be resolved, they're replaced with an empty string.  
+You can use multiple placeholders at once and combine them with other text.  
 Placeholders are not case-sensitive.
 
 ## Available in the Marketplace
