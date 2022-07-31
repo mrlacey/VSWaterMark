@@ -32,9 +32,9 @@ Simply enter one of the following in the configured `Displayed text` and it will
 - **`$(currentDirectoryName)`** - is replaced with the name of the directory (on disk) that contains the current file.
 - **`$(currentProjectName)`** - is replaced with the name of the project (within the solution) the file is in.
 
-If any of the placeholders can't be resolved they're replaced with an empty string.
-
-You can use multiple placeholders at once and combine with other 
+If any of the placeholders can't be resolved they're replaced with an empty string.  
+You can use multiple placeholders at once and combine with other text.  
+Placeholders are not case-sensitive.
 
 ## Available in the Marketplace
 
@@ -45,3 +45,5 @@ Get it from the [Visual Studio Marketplace](https://marketplace.visualstudio.com
 If you have any requests or suggestions, please [raise an issue](https://github.com/mrlacey/VSWaterMark/issues/new).
 
 If you like it, please [leave a review on the marketplace](https://marketplace.visualstudio.com/items?itemName=MattLaceyLtd.WaterMark&ssr=false#review-details).
+
+Help the development and support of this and other extensions by [becoming a sponsor](https://github.com/sponsors/mrlacey).
