@@ -7,7 +7,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace VSWaterMark
 {
@@ -18,6 +20,8 @@ namespace VSWaterMark
         private readonly IWpfTextView _view;
         private readonly IAdornmentLayer _adornmentLayer;
 #pragma warning restore SA1309 // Field names should not begin with underscore
+
+        private string fileName = null;
 
         public WaterMarkAdornment(IWpfTextView view)
         {
@@ -65,6 +69,21 @@ namespace VSWaterMark
             }
         }
 
+        private string GetFileName()
+        {
+            if (fileName == null)
+            {
+                _view.TextBuffer.Properties.TryGetProperty(typeof(IVsTextBuffer), out IVsTextBuffer buffer);
+
+                if (buffer is IPersistFileFormat pff)
+                {
+                    pff.GetCurFile(out fileName, out _);
+                }
+            }
+
+            return fileName;
+        }
+
         private bool TryLoadOptions()
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
@@ -81,17 +100,102 @@ namespace VSWaterMark
 
                 try
                 {
-                    if (!_root.WaterMarkText.Content.ToString().Equals(options.DisplayedText))
+                    string ReplaceIgnoreCase(string input, string replace, Func<string> with)
                     {
-                        _root.WaterMarkText.Content = options.DisplayedText;
+                        var cfPos = input.IndexOf(replace, StringComparison.InvariantCultureIgnoreCase);
 
-                        // Need to force a reshresh after the content has been changed to ensure it gets aligned correctly.
-                        ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+                        if (cfPos >= 0)
                         {
-                            // A small pause for the adornment to be drawn at the new size and then request update to pick up new width.
-                            await System.Threading.Tasks.Task.Delay(200);
-                            Messenger.RequestUpdateAdornment();
-                        });
+                            return input.Substring(0, cfPos) + with.Invoke() + input.Substring(cfPos + replace.Length);
+                        }
+
+                        return input;
+                    }
+
+                    //   System.Diagnostics.Debug.WriteLine($"{} - {}");
+
+                    //  if (!_root.WaterMarkText.Content.ToString().Equals(options.DisplayedText))
+                    {
+                        var displayedText = options.DisplayedText;
+
+                        if (displayedText.ToLowerInvariant().Contains("${current"))
+                        {
+                            var curFile = GetFileName();
+
+                            if (!string.IsNullOrWhiteSpace(curFile))
+                            {
+                                displayedText = ReplaceIgnoreCase(
+                                                    displayedText,
+                                                    "${currentFileName}",
+                                                    () =>
+                                                    {
+                                                        try
+                                                        {
+                                                            return System.IO.Path.GetFileName(curFile);
+                                                        }
+                                                        catch (Exception exc)
+                                                        {
+                                                            OutputError($"Unable to get the name of the file from the path '{curFile}'.");
+                                                            System.Diagnostics.Debug.WriteLine(exc);
+                                                            return string.Empty;
+                                                        }
+                                                    });
+
+                                displayedText = ReplaceIgnoreCase(
+                                                    displayedText,
+                                                    "${currentDirectoryName}",
+                                                    () =>
+                                                    {
+                                                        try
+                                                        {
+                                                            return new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(curFile)).Name;
+                                                        }
+                                                        catch (Exception exc)
+                                                        {
+                                                            OutputError($"Unable to get the name of the dirctory from the current file path '{curFile}'.");
+                                                            System.Diagnostics.Debug.WriteLine(exc);
+                                                            return string.Empty;
+                                                        }
+                                                    });
+
+
+                                var projItem = ProjectHelpers.Dte2.Solution.FindProjectItem(curFile);
+
+                                displayedText = ReplaceIgnoreCase(
+                                                    displayedText,
+                                                    "${currentProjectName}",
+                                                    () =>
+                                                    {
+                                                        try
+                                                        {
+                                                            return projItem?.ContainingProject.Name ?? string.Empty;
+                                                        }
+                                                        catch (Exception exc)
+                                                        {
+                                                            OutputError("Unable to get the name of the project the current file is in.");
+                                                            System.Diagnostics.Debug.WriteLine(exc);
+                                                            return string.Empty;
+                                                        }
+                                                    });
+                            }
+                            else
+                            {
+                                OutputError("Unable to get name of the current file.");
+                            }
+                        }
+
+                        if (!_root.WaterMarkText.Content.ToString().Equals(displayedText))
+                        {
+                            _root.WaterMarkText.Content = displayedText;
+
+                            // Need to force a reshresh after the content has been changed to ensure it gets aligned correctly.
+                            ThreadHelper.JoinableTaskFactory.Run(async () =>
+                            {
+                                // A small pause for the adornment to be drawn at the new size and then request update to pick up new width.
+                                await System.Threading.Tasks.Task.Delay(200);
+                                Messenger.RequestUpdateAdornment();
+                            });
+                        }
                     }
                 }
                 catch (Exception exc)
@@ -202,6 +306,14 @@ namespace VSWaterMark
             }
 
             System.Diagnostics.Debug.WriteLine("Package not loaded");
+
+            // Try and load the package so it's there the next time try to access it.
+            if (ServiceProvider.GlobalProvider.GetService(typeof(SVsShell)) is IVsShell shell)
+            {
+                Guid packageToBeLoadedGuid = new Guid(VSWaterMarkPackage.PackageGuidString);
+                shell.LoadPackage(ref packageToBeLoadedGuid, out _);
+            }
+
             return false;
         }
 
