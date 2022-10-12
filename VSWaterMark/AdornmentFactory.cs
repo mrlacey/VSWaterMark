@@ -10,13 +10,12 @@ namespace VSWaterMark
 {
     [Export(typeof(IWpfTextViewCreationListener))]
     [ContentType("text")]
-    [TextViewRole(PredefinedTextViewRoles.Document)]
+    [TextViewRole(PredefinedTextViewRoles.PrimaryDocument)]
     internal sealed class AdornmentFactory : IWpfTextViewCreationListener
     {
         [Export(typeof(AdornmentLayerDefinition))]
         [Name(nameof(WaterMarkAdornment))]
-        [Order(After = PredefinedAdornmentLayers.Caret)]
-        [TextViewRole(PredefinedTextViewRoles.Document)]
+        [Order(After = PredefinedAdornmentLayers.Text)]
 #pragma warning disable SA1401 // Fields should be private - made public for MEF
         public AdornmentLayerDefinition EditorAdornmentLayer = null;
 #pragma warning restore SA1401 // Fields should be private

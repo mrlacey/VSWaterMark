@@ -19,7 +19,7 @@
                 Name="WaterMarkText"
                 FontFamily="Arial"
                 FontSize="12"
-                Content="@mrl"
+                Content="@MRLacey"
                 Foreground="Black" />
         </Grid>
     </Border>
