@@ -385,6 +385,7 @@ namespace VSWaterMark
                 case "blue": return "#0000FF";
                 case "blueviolet": return "#8A2BE2";
                 case "brown": return "#A52A2A";
+                case "burgendy": return "#FF6347";
                 case "burlywood": return "#DEB887";
                 case "cadetblue": return "#5F9EA0";
                 case "chartreuse": return "#7FFF00";
@@ -413,6 +414,7 @@ namespace VSWaterMark
                 case "darkslategrey": return "#2F4F4F";
                 case "darkturquoise": return "#00CED1";
                 case "darkviolet": return "#9400D3";
+                case "darkyellow": return "#D7C32A";
                 case "deeppink": return "#FF1493";
                 case "deepskyblue": return "#00BFFF";
                 case "dimgray": return "#696969";
@@ -470,11 +472,13 @@ namespace VSWaterMark
                 case "mediumturquoise": return "#48D1CC";
                 case "mediumvioletred": return "#C71585";
                 case "midnightblue": return "#191970";
+                case "mint": return "#66CDAA";
                 case "mintcream": return "#F5FFFA";
                 case "mistyrose": return "#FFE4E1";
                 case "moccasin": return "#FFE4B5";
                 case "navajowhite": return "#FFDEAD";
                 case "navy": return "#000080";
+                case "ochre": return "#D7C32A";
                 case "oldlace": return "#FDF5E6";
                 case "olive": return "#808000";
                 case "olivedrab": return "#6B8E23";
@@ -492,6 +496,7 @@ namespace VSWaterMark
                 case "plum": return "#DDA0DD";
                 case "powderblue": return "#B0E0E6";
                 case "purple": return "#800080";
+                case "pumpkin": return "#FF4500";
                 case "rebeccapurple": return "#663399";
                 case "red": return "#FF0000";
                 case "rosybrown": return "#BC8F8F";
@@ -516,6 +521,7 @@ namespace VSWaterMark
                 case "tomato": return "#FF6347";
                 case "turquoise": return "#40E0D0";
                 case "violet": return "#EE82EE";
+                case "volt": return "#CEFF00";
                 case "wheat": return "#F5DEB3";
                 case "white": return "#FFFFFF";
                 case "whitesmoke": return "#F5F5F5";
