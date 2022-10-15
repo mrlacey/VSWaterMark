@@ -28,9 +28,9 @@ This can help you (or anyone looking at the screen) differentiate files more eas
 
 Simply enter one of the following in the configured `Displayed text` and it will be replaced when shown in the editor.
 
-- **`$(currentFileName)`** - is replaced with the name of the current file.
-- **`$(currentDirectoryName)`** - is replaced with the name of the directory (on disk) that contains the current file.
-- **`$(currentProjectName)`** - is replaced with the name of the project (within the solution) the file is in.
+- **`${currentFileName}`** - is replaced with the name of the current file.
+- **`${currentDirectoryName}`** - is replaced with the name of the directory (on disk) that contains the current file.
+- **`${currentProjectName}`** - is replaced with the name of the project (within the solution) the file is in.
 
 If any of the placeholders can't be resolved, they're replaced with an empty string.  
 You can use multiple placeholders at once and combine them with other text.  
