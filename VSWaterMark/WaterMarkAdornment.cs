@@ -6,6 +6,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text.Editor;
@@ -44,26 +45,6 @@ namespace VSWaterMark
             RefreshAdornment();
         }
 
-        private void OnUpdateRequested()
-        {
-            RefreshAdornment();
-        }
-
-        private void OnSizeChanged()
-        {
-            RefreshAdornment();
-        }
-
-        private void OnViewClosed()
-        {
-            _view.ViewportHeightChanged -= (sender, e) => OnSizeChanged();
-            _view.ViewportWidthChanged -= (sender, e) => OnSizeChanged();
-
-            _view.Closed -= (s, e) => OnViewClosed();
-
-            Messenger.UpdateAdornment -= () => OnUpdateRequested();
-        }
-
         public void RefreshAdornment()
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
@@ -96,6 +77,26 @@ namespace VSWaterMark
                     OutputError($"Unable to display the water mark{Environment.NewLine}{exc}", exc);
                 }
             }
+        }
+
+        private void OnUpdateRequested()
+        {
+            RefreshAdornment();
+        }
+
+        private void OnSizeChanged()
+        {
+            RefreshAdornment();
+        }
+
+        private void OnViewClosed()
+        {
+            _view.ViewportHeightChanged -= (sender, e) => OnSizeChanged();
+            _view.ViewportWidthChanged -= (sender, e) => OnSizeChanged();
+
+            _view.Closed -= (s, e) => OnViewClosed();
+
+            Messenger.UpdateAdornment -= () => OnUpdateRequested();
         }
 
         private string GetFileName()
@@ -145,90 +146,119 @@ namespace VSWaterMark
 
                     var displayedText = options.DisplayedText;
 
-                    if (displayedText.ToLowerInvariant().Contains("${current"))
+                    if (displayedText.StartsWith("IMG:"))
                     {
-                        var curFile = GetFileName();
-
-                        if (!string.IsNullOrWhiteSpace(curFile))
+                        try
                         {
-                            displayedText = ReplaceIgnoreCase(
-                                                displayedText,
-                                                "${currentFileName}",
-                                                () =>
-                                                {
-                                                    try
-                                                    {
-                                                        return System.IO.Path.GetFileName(curFile);
-                                                    }
-                                                    catch (Exception exc)
-                                                    {
-                                                        OutputError($"Unable to get the name of the file from the path '{curFile}'.");
-                                                        System.Diagnostics.Debug.WriteLine(exc);
-                                                        return string.Empty;
-                                                    }
-                                                });
+                            _root.WaterMarkImage.Visibility = Visibility.Visible;
+                            _root.WaterMarkText.Visibility = Visibility.Hidden;
 
-                            displayedText = ReplaceIgnoreCase(
-                                                displayedText,
-                                                "${currentDirectoryName}",
-                                                () =>
-                                                {
-                                                    try
-                                                    {
-                                                        return new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(curFile)).Name;
-                                                    }
-                                                    catch (Exception exc)
-                                                    {
-                                                        OutputError($"Unable to get the name of the dirctory from the current file path '{curFile}'.");
-                                                        System.Diagnostics.Debug.WriteLine(exc);
-                                                        return string.Empty;
-                                                    }
-                                                });
+                            var path = displayedText.Substring(4);
 
-                            var projItem = ProjectHelpers.Dte2.Solution.FindProjectItem(curFile);
-
-                            displayedText = ReplaceIgnoreCase(
-                                                displayedText,
-                                                "${currentProjectName}",
-                                                () =>
-                                                {
-                                                    try
-                                                    {
-                                                        ThreadHelper.ThrowIfNotOnUIThread();
-
-                                                        return projItem?.ContainingProject.Name ?? string.Empty;
-                                                    }
-                                                    catch (Exception exc)
-                                                    {
-                                                        OutputError("Unable to get the name of the project the current file is in.");
-                                                        System.Diagnostics.Debug.WriteLine(exc);
-                                                        return string.Empty;
-                                                    }
-                                                });
+                            if (System.IO.File.Exists(path))
+                            {
+                                _root.WaterMarkImage.Source = new BitmapImage(new Uri(path));
+                            }
+                            else
+                            {
+                                OutputError($"Specified image not found: '{path}'");
+                            }
                         }
-                        else
+                        catch (Exception exc)
                         {
-                            OutputError("Unable to get name of the current file.");
+                            OutputError($"Unable to set image.", exc);
                         }
                     }
-
-                    if (!_root.WaterMarkText.Content.ToString().Equals(displayedText))
+                    else
                     {
-                        // TODO: If right-aligned, need to remeasure the width appropriately | See  #9
-                        _root.WaterMarkText.Content = displayedText;
-                        ////_ = System.Threading.Tasks.Task.Delay(200).ConfigureAwait(true);
-                        ////_root.Measure((_view as FrameworkElement).RenderSize);
+                        _root.WaterMarkImage.Visibility = Visibility.Hidden;
+                        _root.WaterMarkText.Visibility = Visibility.Visible;
 
-                        // Need to force a reshresh after the content has been changed to ensure it gets aligned correctly.
-                        ////ThreadHelper.JoinableTaskFactory.Run(async () =>
-                        ////{
-                        ////    // A small pause for the adornment to be drawn at the new size and then request update to pick up new width.
-                        ////    await System.Threading.Tasks.Task.Delay(200);
+                        if (displayedText.ToLowerInvariant().Contains("${current"))
+                        {
+                            var curFile = GetFileName();
 
-                        ////    ////Messenger.RequestUpdateAdornment();
-                        ////    ///
-                        ////    RefreshAdornment();
-                        ////});
+                            if (!string.IsNullOrWhiteSpace(curFile))
+                            {
+                                displayedText = ReplaceIgnoreCase(
+                                                    displayedText,
+                                                    "${currentFileName}",
+                                                    () =>
+                                                    {
+                                                        try
+                                                        {
+                                                            return System.IO.Path.GetFileName(curFile);
+                                                        }
+                                                        catch (Exception exc)
+                                                        {
+                                                            OutputError($"Unable to get the name of the file from the path '{curFile}'.");
+                                                            System.Diagnostics.Debug.WriteLine(exc);
+                                                            return string.Empty;
+                                                        }
+                                                    });
+
+                                displayedText = ReplaceIgnoreCase(
+                                                    displayedText,
+                                                    "${currentDirectoryName}",
+                                                    () =>
+                                                    {
+                                                        try
+                                                        {
+                                                            return new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(curFile)).Name;
+                                                        }
+                                                        catch (Exception exc)
+                                                        {
+                                                            OutputError($"Unable to get the name of the dirctory from the current file path '{curFile}'.");
+                                                            System.Diagnostics.Debug.WriteLine(exc);
+                                                            return string.Empty;
+                                                        }
+                                                    });
+
+                                var projItem = ProjectHelpers.Dte2.Solution.FindProjectItem(curFile);
+
+                                displayedText = ReplaceIgnoreCase(
+                                                    displayedText,
+                                                    "${currentProjectName}",
+                                                    () =>
+                                                    {
+                                                        try
+                                                        {
+                                                            ThreadHelper.ThrowIfNotOnUIThread();
+
+                                                            return projItem?.ContainingProject.Name ?? string.Empty;
+                                                        }
+                                                        catch (Exception exc)
+                                                        {
+                                                            OutputError("Unable to get the name of the project the current file is in.");
+                                                            System.Diagnostics.Debug.WriteLine(exc);
+                                                            return string.Empty;
+                                                        }
+                                                    });
+                            }
+                            else
+                            {
+                                OutputError("Unable to get name of the current file.");
+                            }
+                        }
+
+                        if (!_root.WaterMarkText.Content.ToString().Equals(displayedText))
+                        {
+                            // TODO: If right-aligned, need to remeasure the width appropriately | See  #9
+                            _root.WaterMarkText.Content = displayedText;
+                            ////_ = System.Threading.Tasks.Task.Delay(200).ConfigureAwait(true);
+                            ////_root.Measure((_view as FrameworkElement).RenderSize);
+
+                            // Need to force a reshresh after the content has been changed to ensure it gets aligned correctly.
+                            ////ThreadHelper.JoinableTaskFactory.Run(async () =>
+                            ////{
+                            ////    // A small pause for the adornment to be drawn at the new size and then request update to pick up new width.
+                            ////    await System.Threading.Tasks.Task.Delay(200);
+
+                            ////    ////Messenger.RequestUpdateAdornment();
+                            ////    ///
+                            ////    RefreshAdornment();
+                            ////});
+                        }
                     }
                 }
                 catch (Exception exc)

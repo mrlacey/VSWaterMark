@@ -36,6 +36,12 @@ If any of the placeholders can't be resolved, they're replaced with an empty str
 You can use multiple placeholders at once and combine them with other text.  
 Placeholders are not case-sensitive.
 
+### Display Images
+
+Display an image rather than text.
+
+To do this, set the `DisplayedText` to start with **`IMG:`** immediately followed by an absolute path to the file to use.
+
 ## Available in the Marketplace
 
 Get it from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=MattLaceyLtd.WaterMark).

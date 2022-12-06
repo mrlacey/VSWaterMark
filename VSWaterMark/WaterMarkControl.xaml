@@ -21,6 +21,9 @@
                 FontSize="12"
                 Content="@MRLacey"
                 Foreground="Black" />
+            <Image
+                Name="WaterMarkImage"
+                Visibility="Hidden" />
         </Grid>
     </Border>
 </UserControl>
