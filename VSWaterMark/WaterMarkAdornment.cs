@@ -237,7 +237,11 @@ namespace VSWaterMark
                             }
                             else
                             {
-                                OutputError("Unable to get name of the current file.");
+                                // We try and refresh/reload/reposition the adornment any time somethign relevant happens.
+                                // This includes when documents are initially opened and resized but before the file name is available.
+                                // Avoid filling the output window with these messages when there's nothing the user can do about them.
+                                //OutputError("Unable to get name of the current file.");
+                                System.Diagnostics.Debug.WriteLine("Unable to get name of the current file.");
                             }
                         }
 
