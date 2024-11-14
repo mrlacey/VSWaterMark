@@ -6,7 +6,6 @@
 ![Visual Studio Marketplace 5 Stars](https://img.shields.io/badge/VS%20Marketplace-★★★★★-green)
 
 [![Build](https://github.com/mrlacey/VSWaterMark/actions/workflows/build.yaml/badge.svg)](https://github.com/mrlacey/VSWaterMark/actions/workflows/build.yaml)
-![Tests](https://gist.githubusercontent.com/mrlacey/c586ff0f495b4a8dd76ab0dbdf9c89e0/raw/VSWaterMark.badge.svg)
 
 Display a text watermark over the Visual Studio editor.
 
