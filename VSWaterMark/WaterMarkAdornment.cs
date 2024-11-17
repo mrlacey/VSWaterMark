@@ -17,11 +17,9 @@ namespace VSWaterMark
 {
 	public class WaterMarkAdornment
 	{
-#pragma warning disable SA1309 // Field names should not begin with underscore
 		private readonly WaterMarkControl _root;
 		private readonly IWpfTextView _view;
 		private readonly IAdornmentLayer _adornmentLayer;
-#pragma warning restore SA1309 // Field names should not begin with underscore
 
 		private string fileName = null;
 
@@ -83,6 +81,8 @@ namespace VSWaterMark
 
 		private void OnUpdateRequested()
 		{
+			ThreadHelper.ThrowIfNotOnUIThread();
+
 			RefreshAdornment();
 		}
 
@@ -93,13 +93,23 @@ namespace VSWaterMark
 
 		private void OnSizeChanged()
 		{
+			ThreadHelper.ThrowIfNotOnUIThread();
 			RefreshAdornment();
 		}
 
 		private void OnViewClosed()
 		{
-			_view.ViewportHeightChanged -= (sender, e) => OnSizeChanged();
-			_view.ViewportWidthChanged -= (sender, e) => OnSizeChanged();
+			_view.ViewportHeightChanged -= (sender, e) =>
+			{
+				ThreadHelper.ThrowIfNotOnUIThread();
+				OnSizeChanged();
+			};
+			_view.ViewportWidthChanged -= (sender, e) =>
+			{
+				ThreadHelper.ThrowIfNotOnUIThread();
+
+				OnSizeChanged();
+			};
 
 			_view.Closed -= (s, e) => OnViewClosed();
 
