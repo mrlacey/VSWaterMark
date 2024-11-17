@@ -327,7 +327,7 @@ namespace VSWaterMark
 				{
 					_root.WaterMarkBorder.Background = ColorHelper.GetColorBrush(options.BorderBackground);
 
-					if (_root.WaterMarkText.Background == null)
+					if (_root.WaterMarkBorder.Background == null)
 					{
 						OutputError($"Unable to set the Background Color to {options.BorderBackground}");
 					}
@@ -341,7 +341,7 @@ namespace VSWaterMark
 				{
 					_root.WaterMarkBorder.BorderBrush = ColorHelper.GetColorBrush(options.BorderColor);
 
-					if (_root.WaterMarkText.BorderBrush == null)
+					if (_root.WaterMarkBorder.BorderBrush == null)
 					{
 						OutputError($"Unable to set the Border Color to {options.BorderColor}");
 					}
