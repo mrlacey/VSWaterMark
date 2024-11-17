@@ -38,7 +38,7 @@ namespace VSWaterMark
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            this.wmPane.OutputString(message);
+            this.wmPane.OutputStringThreadSafe(message);
         }
 
         public void Activate()
