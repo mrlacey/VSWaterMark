@@ -152,7 +152,7 @@ namespace VSWaterMark
 
 				try
 				{
-					string ReplaceIgnoreCase(string input, string replace, Func<string> with)
+					static string ReplaceIgnoreCase(string input, string replace, Func<string> with)
 					{
 						var cfPos = input.IndexOf(replace, StringComparison.InvariantCultureIgnoreCase);
 
@@ -410,7 +410,7 @@ namespace VSWaterMark
 			// Try and load the package so it's there the next time try to access it.
 			if (ServiceProvider.GlobalProvider.GetService(typeof(SVsShell)) is IVsShell shell)
 			{
-				Guid packageToBeLoadedGuid = new Guid(VSWaterMarkPackage.PackageGuidString);
+				Guid packageToBeLoadedGuid = new(VSWaterMarkPackage.PackageGuidString);
 				shell.LoadPackage(ref packageToBeLoadedGuid, out _);
 			}
 
