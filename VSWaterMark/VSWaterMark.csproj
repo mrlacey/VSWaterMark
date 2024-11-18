@@ -127,6 +127,7 @@
     <EmbeddedResource Include="VSPackage.resx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="filestosign.txt" />
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
