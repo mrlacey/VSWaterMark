@@ -11,7 +11,7 @@ namespace VSWaterMark
         public const string Name = "WaterMark";
         public const string Description = @"Add a configurable watermark to the editor.";
         public const string Language = "en-US";
-        public const string Version = "1.9.3";
+        public const string Version = "1.9.4";
         public const string Author = "Matt Lacey";
         public const string Tags = "";
     }
